@@ -1,22 +1,24 @@
 sudo: required
+language: generic
+
 services:
-  -docker
+  - docker
 
-  before_install:
-    -docker build -t multidocker/react-test -f ./client/Dockerfile.dev ./client
+before_install:
+  - docker build -t pankajmalhotra9/react-test -f ./client/Dockerfile.dev ./client
 
-  script:
-    - docker run -e CI=true multidocker/react-test npm test
+script:
+  - docker run -e CI=true pankajmalhotra9/react-test npm test
 
 after_success:
-  - docker build -t multidocker/client ./client
-  - docker build -t multidocker/nginx ./nginx
-  - docker build -t multidocker/server ./server
-  - docker build -t multidocker/worker ./worker 
-  #login to docker cli
+  - docker build -t pankajmalhotra9/multi-client ./client
+  - docker build -t pankajmalhotra9/multi-nginx ./nginx
+  - docker build -t pankajmalhotra9/multi-server ./server
+  - docker build -t pankajmalhotra9/multi-worker ./worker
+  # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  #take those images and push them to docker hub
-  - docker push multidocker/client
-  - docker push multidocker/nginx
-  - docker push multidocker/server
-  - docker push multidocker/worker
+  # Take those images and push them to docker hub
+  - docker push pankajmalhotra9/multi-client
+  - docker push pankajmalhotra9/multi-nginx
+  - docker push pankajmalhotra9/multi-server
+  - docker push pankajmalhotra9/multi-worker
